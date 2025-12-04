@@ -1,0 +1,1235 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>親御さん向け質問票 | Tools. 合理的配慮ガイドブック</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Zen+Maru+Gothic:wght@400;500;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary: #F5C518;
+            --primary-dark: #E5B508;
+            --secondary: #C74B4B;
+            --secondary-light: #D85A5A;
+            --bg: #FFFEF7;
+            --bg-subtle: #FAF9F4;
+            --text: #2D2D2D;
+            --text-light: #666666;
+            --card-bg: #FFFFFF;
+            --border: #E8E4D9;
+            --success: #4CAF50;
+            --shadow: 0 4px 20px rgba(0,0,0,0.08);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Zen Maru Gothic', sans-serif;
+            background: var(--bg);
+            color: var(--text);
+            line-height: 1.8;
+            min-height: 100vh;
+        }
+
+        /* ==================== */
+        /* MOBILE STYLES (Default) */
+        /* ==================== */
+
+        /* Header */
+        .header {
+            background: var(--primary);
+            padding: 1.5rem 1rem;
+            text-align: center;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+
+        .header h1 {
+            font-size: 1.4rem;
+            font-weight: 700;
+            color: var(--text);
+            margin-bottom: 0.3rem;
+        }
+
+        .header p {
+            font-size: 0.85rem;
+            color: var(--text-light);
+        }
+
+        /* Progress Bar */
+        .progress-container {
+            background: var(--border);
+            height: 6px;
+            width: 100%;
+        }
+
+        .progress-bar {
+            background: var(--secondary);
+            height: 100%;
+            width: 0%;
+            transition: width 0.3s ease;
+        }
+
+        .progress-text {
+            text-align: center;
+            padding: 0.5rem;
+            font-size: 0.85rem;
+            color: var(--text-light);
+            background: var(--card-bg);
+        }
+
+        /* Main Content */
+        .main {
+            padding: 1rem;
+            max-width: 600px;
+            margin: 0 auto;
+        }
+
+        /* Section Header */
+        .section-header {
+            background: var(--secondary);
+            color: white;
+            padding: 0.8rem 1rem;
+            border-radius: 12px 12px 0 0;
+            font-weight: 700;
+            font-size: 1rem;
+            margin-top: 1.5rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .section-header:first-child {
+            margin-top: 0;
+        }
+
+        .section-header-icon {
+            display: none;
+        }
+
+        /* Question Card */
+        .questions-wrapper {
+            background: var(--card-bg);
+            border: 1px solid var(--border);
+            border-top: none;
+            border-radius: 0 0 12px 12px;
+            margin-bottom: 1rem;
+        }
+
+        .question-card {
+            padding: 1.2rem;
+            border-bottom: 1px solid var(--border);
+        }
+
+        .question-card:last-child {
+            border-bottom: none;
+        }
+
+        .question-header {
+            margin-bottom: 1rem;
+        }
+
+        .question-number {
+            display: inline-block;
+            background: var(--primary);
+            color: var(--text);
+            font-weight: 700;
+            font-size: 0.8rem;
+            padding: 0.2rem 0.6rem;
+            border-radius: 20px;
+            margin-bottom: 0.5rem;
+        }
+
+        .question-text {
+            font-size: 0.95rem;
+            font-weight: 500;
+            line-height: 1.6;
+        }
+
+        textarea {
+            width: 100%;
+            min-height: 100px;
+            padding: 1rem;
+            border: 2px solid var(--border);
+            border-radius: 10px;
+            font-family: inherit;
+            font-size: 1rem;
+            resize: vertical;
+            transition: all 0.2s;
+            background: var(--bg);
+        }
+
+        textarea:focus {
+            outline: none;
+            border-color: var(--primary);
+            background: var(--card-bg);
+        }
+
+        textarea::placeholder {
+            color: #AAAAAA;
+        }
+
+        /* Navigation Buttons */
+        .nav-buttons {
+            display: flex;
+            gap: 0.8rem;
+            margin-top: 1.5rem;
+            padding-bottom: 2rem;
+        }
+
+        .btn {
+            flex: 1;
+            padding: 1rem;
+            border: none;
+            border-radius: 10px;
+            font-family: inherit;
+            font-size: 1rem;
+            font-weight: 700;
+            cursor: pointer;
+            transition: all 0.2s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.5rem;
+        }
+
+        .btn-prev {
+            background: var(--border);
+            color: var(--text);
+        }
+
+        .btn-next {
+            background: var(--primary);
+            color: var(--text);
+        }
+
+        .btn-complete {
+            background: var(--secondary);
+            color: white;
+        }
+
+        .btn-print {
+            background: var(--secondary);
+            color: white;
+        }
+
+        .btn:active {
+            transform: scale(0.98);
+        }
+
+        .btn:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+
+        /* Intro Screen */
+        .intro-screen {
+            text-align: center;
+            padding: 2rem 1rem;
+        }
+
+        .intro-screen .logo {
+            font-size: 2.5rem;
+            font-weight: 700;
+            color: var(--text);
+            margin-bottom: 0.5rem;
+        }
+
+        .intro-screen .subtitle {
+            color: var(--text-light);
+            margin-bottom: 2rem;
+        }
+
+        .intro-icon {
+            font-size: 4rem;
+            margin-bottom: 1rem;
+        }
+
+        .intro-title {
+            font-size: 1.5rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .intro-cards {
+            margin-bottom: 1.5rem;
+        }
+
+        .intro-card {
+            background: var(--card-bg);
+            border-radius: 16px;
+            padding: 1.5rem;
+            text-align: left;
+            box-shadow: var(--shadow);
+            margin-bottom: 1rem;
+        }
+
+        .intro-card h2 {
+            font-size: 1.1rem;
+            margin-bottom: 1rem;
+            color: var(--secondary);
+        }
+
+        .intro-card p {
+            font-size: 0.9rem;
+            color: var(--text-light);
+            margin-bottom: 0.5rem;
+        }
+
+        .category-list {
+            display: flex;
+            flex-direction: column;
+            gap: 0.3rem;
+        }
+
+        .category-list-item {
+            font-size: 0.9rem;
+            padding: 0.5rem 0;
+            border-bottom: 1px solid var(--border);
+        }
+
+        .start-btn {
+            width: 100%;
+            padding: 1.2rem;
+            background: var(--secondary);
+            color: white;
+            border: none;
+            border-radius: 12px;
+            font-family: inherit;
+            font-size: 1.1rem;
+            font-weight: 700;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .start-btn:active {
+            transform: scale(0.98);
+        }
+
+        /* Complete Screen */
+        .complete-screen {
+            text-align: center;
+            padding: 2rem 1rem;
+        }
+
+        .complete-icon {
+            font-size: 4rem;
+            margin-bottom: 1rem;
+        }
+
+        .complete-screen h2 {
+            font-size: 1.5rem;
+            margin-bottom: 1rem;
+            color: var(--success);
+        }
+
+        .complete-screen p {
+            color: var(--text-light);
+            margin-bottom: 1.5rem;
+        }
+
+        .complete-actions {
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+        }
+
+        /* Screen */
+        .screen {
+            display: none;
+        }
+
+        .screen.active {
+            display: block;
+        }
+
+        /* Category indicator (mobile) */
+        .category-indicator {
+            display: flex;
+            justify-content: center;
+            gap: 0.3rem;
+            padding: 0.8rem;
+            background: var(--card-bg);
+        }
+
+        .category-dot {
+            width: 10px;
+            height: 10px;
+            border-radius: 50%;
+            background: var(--border);
+            transition: all 0.3s;
+        }
+
+        .category-dot.active {
+            background: var(--secondary);
+            transform: scale(1.2);
+        }
+
+        .category-dot.completed {
+            background: var(--success);
+        }
+
+        /* Sidebar (hidden on mobile) */
+        .sidebar {
+            display: none;
+        }
+
+        .app-container {
+            display: block;
+        }
+
+        .main-content {
+            margin-left: 0;
+        }
+
+        /* ==================== */
+        /* PC STYLES (min-width: 900px) */
+        /* ==================== */
+        @media (min-width: 900px) {
+            .app-container {
+                display: flex;
+                min-height: 100vh;
+            }
+
+            /* Show Sidebar */
+            .sidebar {
+                display: flex;
+                flex-direction: column;
+                width: 320px;
+                background: var(--primary);
+                padding: 2rem;
+                position: fixed;
+                height: 100vh;
+                overflow-y: auto;
+            }
+
+            .sidebar-header {
+                margin-bottom: 2rem;
+            }
+
+            .sidebar-logo {
+                font-size: 2.5rem;
+                font-weight: 700;
+                color: var(--text);
+                margin-bottom: 0.3rem;
+            }
+
+            .sidebar-subtitle {
+                font-size: 0.9rem;
+                color: var(--text);
+                opacity: 0.8;
+            }
+
+            .sidebar-title {
+                font-size: 1.3rem;
+                font-weight: 700;
+                color: var(--text);
+                margin-bottom: 1.5rem;
+                padding-bottom: 1rem;
+                border-bottom: 2px solid rgba(0,0,0,0.1);
+            }
+
+            .category-nav {
+                flex: 1;
+            }
+
+            .category-item {
+                display: flex;
+                align-items: center;
+                padding: 1rem;
+                margin-bottom: 0.5rem;
+                border-radius: 12px;
+                cursor: pointer;
+                transition: all 0.2s;
+                background: rgba(255,255,255,0.3);
+            }
+
+            .category-item:hover {
+                background: rgba(255,255,255,0.5);
+            }
+
+            .category-item.active {
+                background: var(--card-bg);
+                box-shadow: var(--shadow);
+            }
+
+            .category-item.completed .category-icon {
+                background: var(--success);
+                color: white;
+            }
+
+            .category-icon {
+                width: 36px;
+                height: 36px;
+                background: var(--card-bg);
+                border-radius: 50%;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                font-weight: 700;
+                font-size: 0.9rem;
+                margin-right: 1rem;
+                flex-shrink: 0;
+            }
+
+            .category-info h3 {
+                font-size: 0.95rem;
+                font-weight: 700;
+                margin-bottom: 0.2rem;
+            }
+
+            .category-info p {
+                font-size: 0.8rem;
+                opacity: 0.7;
+            }
+
+            .sidebar-progress {
+                margin-top: 2rem;
+                padding-top: 1.5rem;
+                border-top: 2px solid rgba(0,0,0,0.1);
+            }
+
+            .progress-label {
+                display: flex;
+                justify-content: space-between;
+                font-size: 0.9rem;
+                margin-bottom: 0.5rem;
+            }
+
+            .progress-bar-container {
+                background: rgba(0,0,0,0.1);
+                border-radius: 10px;
+                height: 10px;
+                overflow: hidden;
+            }
+
+            .sidebar .progress-bar {
+                background: var(--secondary);
+                height: 100%;
+                width: 0%;
+                transition: width 0.3s ease;
+                border-radius: 10px;
+            }
+
+            /* Hide mobile header/progress on PC */
+            .header,
+            .progress-container,
+            .progress-text,
+            .category-indicator {
+                display: none;
+            }
+
+            /* Main content adjustments */
+            .main-content {
+                flex: 1;
+                margin-left: 320px;
+                padding: 3rem;
+                max-width: 900px;
+            }
+
+            .main {
+                padding: 0;
+                max-width: 100%;
+            }
+
+            /* Intro adjustments */
+            .intro-container {
+                max-width: 700px;
+                margin: 0 auto;
+                padding: 2rem 0;
+            }
+
+            .intro-header {
+                text-align: center;
+                margin-bottom: 3rem;
+            }
+
+            .intro-icon {
+                font-size: 4rem;
+                margin-bottom: 1rem;
+            }
+
+            .intro-header h1 {
+                font-size: 2rem;
+                margin-bottom: 0.5rem;
+            }
+
+            .intro-header p {
+                color: var(--text-light);
+                font-size: 1.1rem;
+            }
+
+            .intro-cards {
+                display: grid;
+                grid-template-columns: 1fr 1fr;
+                gap: 1.5rem;
+                margin-bottom: 2rem;
+            }
+
+            .intro-card.full-width {
+                grid-column: 1 / -1;
+            }
+
+            .category-list {
+                display: grid;
+                grid-template-columns: 1fr 1fr;
+                gap: 0.5rem;
+            }
+
+            .start-btn {
+                display: block;
+                width: 100%;
+                max-width: 400px;
+                margin: 0 auto;
+                padding: 1.2rem 2rem;
+            }
+
+            .start-btn:hover {
+                background: var(--secondary-light);
+                transform: translateY(-2px);
+                box-shadow: 0 6px 20px rgba(199, 75, 75, 0.3);
+            }
+
+            /* Question section adjustments */
+            .section-container {
+                animation: fadeIn 0.3s ease;
+            }
+
+            @keyframes fadeIn {
+                from { opacity: 0; transform: translateY(10px); }
+                to { opacity: 1; transform: translateY(0); }
+            }
+
+            .section-header {
+                padding: 1.2rem 1.5rem;
+                border-radius: 16px 16px 0 0;
+                font-size: 1.2rem;
+                margin-top: 0;
+            }
+
+            .section-header-icon {
+                display: flex;
+                width: 40px;
+                height: 40px;
+                background: rgba(255,255,255,0.2);
+                border-radius: 50%;
+                align-items: center;
+                justify-content: center;
+                font-size: 1rem;
+            }
+
+            .questions-wrapper {
+                border-radius: 0 0 16px 16px;
+                box-shadow: var(--shadow);
+            }
+
+            .question-card {
+                padding: 1.5rem 2rem;
+            }
+
+            .question-header {
+                display: flex;
+                align-items: flex-start;
+                gap: 1rem;
+            }
+
+            .question-number {
+                flex-shrink: 0;
+                margin-bottom: 0;
+            }
+
+            .question-text {
+                font-size: 1.05rem;
+                flex: 1;
+            }
+
+            textarea {
+                min-height: 120px;
+                padding: 1rem 1.2rem;
+                border-radius: 12px;
+                background: var(--bg-subtle);
+                line-height: 1.7;
+            }
+
+            textarea:focus {
+                box-shadow: 0 0 0 4px rgba(245, 197, 24, 0.2);
+            }
+
+            /* Navigation */
+            .nav-buttons {
+                justify-content: space-between;
+                margin-top: 2rem;
+            }
+
+            .btn {
+                flex: none;
+                padding: 1rem 2rem;
+            }
+
+            .btn-prev:hover {
+                background: #DDD9CE;
+            }
+
+            .btn-next:hover {
+                background: var(--primary-dark);
+            }
+
+            .btn-complete:hover {
+                background: var(--secondary-light);
+            }
+
+            /* Complete screen */
+            .complete-container {
+                max-width: 600px;
+                margin: 0 auto;
+                text-align: center;
+                padding: 3rem 0;
+            }
+
+            .complete-icon {
+                font-size: 5rem;
+                margin-bottom: 1.5rem;
+            }
+
+            .complete-screen h2 {
+                font-size: 2rem;
+            }
+
+            .complete-screen p {
+                font-size: 1.1rem;
+                margin-bottom: 2rem;
+            }
+
+            .complete-actions {
+                flex-direction: row;
+                justify-content: center;
+            }
+
+            .btn-print:hover {
+                background: var(--secondary-light);
+            }
+        }
+
+        @media (min-width: 900px) and (max-width: 1100px) {
+            .sidebar {
+                width: 280px;
+            }
+            .main-content {
+                margin-left: 280px;
+                padding: 2rem;
+            }
+        }
+
+        /* ==================== */
+        /* PRINT STYLES */
+        /* ==================== */
+        @media print {
+            .sidebar, .header, .progress-container, .progress-text, 
+            .category-indicator, .nav-buttons, .no-print {
+                display: none !important;
+            }
+
+            .main-content {
+                margin-left: 0;
+                padding: 0;
+                max-width: 100%;
+            }
+
+            body {
+                background: white;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="app-container">
+        <!-- Sidebar (PC only) -->
+        <aside class="sidebar">
+            <div class="sidebar-header">
+                <div class="sidebar-logo">Tools.</div>
+                <p class="sidebar-subtitle">合理的配慮ガイドブック 2025</p>
+            </div>
+            
+            <h2 class="sidebar-title">📝 親御さん向け質問票</h2>
+            
+            <nav class="category-nav" id="category-nav">
+                <!-- Categories will be inserted here -->
+            </nav>
+
+            <div class="sidebar-progress">
+                <div class="progress-label">
+                    <span>進捗状況</span>
+                    <span id="progress-count-pc">0 / 20</span>
+                </div>
+                <div class="progress-bar-container">
+                    <div class="progress-bar" id="progress-bar-pc"></div>
+                </div>
+            </div>
+        </aside>
+
+        <!-- Main Content -->
+        <main class="main-content">
+            <!-- Mobile Header -->
+            <div class="header">
+                <h1>親御さん向け質問票</h1>
+                <p>Tools. 合理的配慮ガイドブック</p>
+            </div>
+            <div class="progress-container">
+                <div class="progress-bar" id="progress-bar-mobile"></div>
+            </div>
+            <div class="progress-text" id="progress-text-mobile">0 / 20 完了</div>
+            <div class="category-indicator" id="category-indicator"></div>
+
+            <!-- Intro Screen -->
+            <div id="intro-screen" class="screen active">
+                <div class="main intro-screen">
+                    <div class="intro-container">
+                        <div class="intro-header">
+                            <div class="intro-icon">📋</div>
+                            <h1 class="intro-title">親御さん向け質問票</h1>
+                            <p class="subtitle">全20項目</p>
+                        </div>
+                        
+                        <div class="intro-cards">
+                            <div class="intro-card full-width">
+                                <h2>📖 この質問票について</h2>
+                                <p>日頃感じているお子さんの課題や得意なところ、必要だと考えている配慮、将来のイメージなどについて、そのまま書き込んでいただける質問票です。</p>
+                                <p>学校の先生との話し合いの材料としてご活用ください。回答は自動保存されます。</p>
+                            </div>
+
+                            <div class="intro-card full-width">
+                                <h2>📂 カテゴリー構成</h2>
+                                <div class="category-list">
+                                    <div class="category-list-item">A. 感覚・身体・生活リズム（3問）</div>
+                                    <div class="category-list-item">B. 行動・注意力・衝動性（3問）</div>
+                                    <div class="category-list-item">C. 社会性・コミュニケーション（3問）</div>
+                                    <div class="category-list-item">D. 学習特性（3問）</div>
+                                    <div class="category-list-item">E. 心理・自己肯定感（2問）</div>
+                                    <div class="category-list-item">F. 具体的支援ニーズと連携（6問）</div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <button class="start-btn" onclick="startQuestionnaire()">質問を始める →</button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Questionnaire Screen -->
+            <div id="questionnaire-screen" class="screen">
+                <div class="main" id="questions-container">
+                    <!-- Questions will be inserted here -->
+                </div>
+            </div>
+
+            <!-- Complete Screen -->
+            <div id="complete-screen" class="screen">
+                <div class="main complete-screen">
+                    <div class="complete-container">
+                        <div class="complete-icon">🎉</div>
+                        <h2>お疲れ様でした！</h2>
+                        <p>全ての質問への回答が完了しました。<br>下のボタンから印刷して、学校との面談にお持ちください。</p>
+                        
+                        <div class="complete-actions">
+                            <button class="btn btn-prev" onclick="backToQuestions()">
+                                ← 回答を見直す
+                            </button>
+                            <button class="btn btn-print" onclick="printAnswers()">
+                                📄 回答を印刷する
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <script>
+        const questions = [
+            {
+                category: "A",
+                title: "感覚・身体・生活リズム",
+                icon: "👁️",
+                questions: [
+                    { num: 1, text: "音、光、肌触り、温度、味覚などで、極端に嫌がるものや、こだわりはありますか？" },
+                    { num: 2, text: "睡眠リズムの乱れや、極端な偏食、体調を崩しやすい気象条件などはありますか？" },
+                    { num: 3, text: "手先の不器用さ（ボタン、靴紐、箸）や、全身運動（ボール運動、姿勢保持）でのぎこちなさは見られますか？" }
+                ]
+            },
+            {
+                category: "B",
+                title: "行動・注意力・衝動性",
+                icon: "⚡",
+                questions: [
+                    { num: 4, text: "忘れ物や紛失が多い、整理整頓が苦手、時間の管理が難しいといったことはありますか？" },
+                    { num: 5, text: "興味のあることには過剰に集中する一方で、切り替えが難しかったり、興味のない課題には着手できなかったりしますか？" },
+                    { num: 6, text: "思いつくと即座に行動してしまう、順番が待てない、些細なことでカッとなりやすい面はありますか？" }
+                ]
+            },
+            {
+                category: "C",
+                title: "社会性・コミュニケーション",
+                icon: "💬",
+                questions: [
+                    { num: 7, text: "集団の中での指示理解が難しく、個別に声をかけないと気付かないことはありますか？" },
+                    { num: 8, text: "言葉の裏を読むことや、冗談・曖昧な表現（「適当に」「ちゃんと」）を理解するのが苦手ですか？" },
+                    { num: 9, text: "予定の変更や、いつもと違う手順に対して、強い不安やパニックを示すことはありますか？" }
+                ]
+            },
+            {
+                category: "D",
+                title: "学習特性",
+                icon: "📚",
+                questions: [
+                    { num: 10, text: "「聞く」「話す」「読む」「書く」「計算する」「推論する」の中で、極端に苦手さが見られる分野はありますか？" },
+                    { num: 11, text: "板書をノートに写すのに時間がかかる、または行を飛ばして読んだり、特定の文字を誤読したりしますか？" },
+                    { num: 12, text: "抽象的な概念（数、時間、気持ちなど）の理解に時間がかかり、実物や図を使った説明の方が理解しやすいですか？" }
+                ]
+            },
+            {
+                category: "E",
+                title: "心理・自己肯定感",
+                icon: "💚",
+                questions: [
+                    { num: 13, text: "学校生活に関して、現在どのような不安やストレスを本人が訴えていますか？（行き渋り、頭痛腹痛など）" },
+                    { num: 14, text: "失敗に対して過度に落ち込んだり、「どうせ自分なんて」といった発言が見られますか？" }
+                ]
+            },
+            {
+                category: "F",
+                title: "具体的支援ニーズと連携",
+                icon: "🤝",
+                questions: [
+                    { num: 15, text: "これまで（家庭や以前の学校で）試してみて、うまくいった関わり方や工夫はありますか？" },
+                    { num: 16, text: "逆に、これをされるとパニックになる、意固地になるという「避けてほしい対応」はありますか？" },
+                    { num: 17, text: "学習評価（テスト）について、どのような配慮があれば実力を発揮できると思いますか？（別室受験、時間延長、読み上げ、PC使用など）" },
+                    { num: 18, text: "宿題や提出物について、量の調整や形式の変更（書く量を減らすなど）を希望しますか？" },
+                    { num: 19, text: "学校以外で連携している専門機関（医療機関、放課後等デイサービスなど）はありますか？" },
+                    { num: 20, text: "将来の進路や自立に向けて、学校と共有しておきたい長期的な目標や夢はありますか？" }
+                ]
+            }
+        ];
+
+        let answers = {};
+        let currentCategoryIndex = 0;
+
+        function initAnswers() {
+            questions.forEach(section => {
+                section.questions.forEach(q => {
+                    answers[q.num] = localStorage.getItem(`answer_parent_${q.num}`) || '';
+                });
+            });
+        }
+
+        function saveAnswer(num, value) {
+            answers[num] = value;
+            localStorage.setItem(`answer_parent_${q.num}`, value);
+            updateProgress();
+            renderCategoryNav();
+            renderCategoryIndicator();
+        }
+
+        function updateProgress() {
+            const total = 20;
+            const filled = Object.values(answers).filter(a => a.trim() !== '').length;
+            const percentage = (filled / total) * 100;
+            
+            // Mobile
+            const mobileBar = document.getElementById('progress-bar-mobile');
+            const mobileText = document.getElementById('progress-text-mobile');
+            if (mobileBar) mobileBar.style.width = `${percentage}%`;
+            if (mobileText) mobileText.textContent = `${filled} / ${total} 完了`;
+
+            // PC
+            const pcBar = document.getElementById('progress-bar-pc');
+            const pcCount = document.getElementById('progress-count-pc');
+            if (pcBar) pcBar.style.width = `${percentage}%`;
+            if (pcCount) pcCount.textContent = `${filled} / ${total}`;
+        }
+
+        function isCategoryCompleted(section) {
+            return section.questions.every(q => answers[q.num]?.trim() !== '');
+        }
+
+        function renderCategoryNav() {
+            const nav = document.getElementById('category-nav');
+            if (!nav) return;
+            
+            nav.innerHTML = questions.map((section, index) => {
+                const isActive = index === currentCategoryIndex;
+                const isCompleted = isCategoryCompleted(section);
+                const answeredCount = section.questions.filter(q => answers[q.num]?.trim() !== '').length;
+                
+                return `
+                    <div class="category-item ${isActive ? 'active' : ''} ${isCompleted ? 'completed' : ''}" 
+                         onclick="goToCategory(${index})">
+                        <div class="category-icon">${isCompleted ? '✓' : section.category}</div>
+                        <div class="category-info">
+                            <h3>${section.title}</h3>
+                            <p>${answeredCount} / ${section.questions.length} 回答済み</p>
+                        </div>
+                    </div>
+                `;
+            }).join('');
+        }
+
+        function renderCategoryIndicator() {
+            const container = document.getElementById('category-indicator');
+            if (!container) return;
+            
+            container.innerHTML = questions.map((section, index) => {
+                const isActive = index === currentCategoryIndex;
+                const isCompleted = isCategoryCompleted(section);
+                let className = 'category-dot';
+                if (isActive) className += ' active';
+                if (isCompleted) className += ' completed';
+                return `<div class="${className}" title="${section.title}"></div>`;
+            }).join('');
+        }
+
+        function goToCategory(index) {
+            if (document.getElementById('intro-screen').classList.contains('active')) {
+                startQuestionnaire();
+            }
+            if (document.getElementById('complete-screen').classList.contains('active')) {
+                document.getElementById('complete-screen').classList.remove('active');
+                document.getElementById('questionnaire-screen').classList.add('active');
+            }
+            currentCategoryIndex = index;
+            renderQuestions();
+            renderCategoryNav();
+            renderCategoryIndicator();
+        }
+
+        function renderQuestions() {
+            const container = document.getElementById('questions-container');
+            const section = questions[currentCategoryIndex];
+            
+            let html = `
+                <div class="section-container">
+                    <div class="section-header">
+                        <div class="section-header-icon">${section.icon}</div>
+                        <span>${section.category}. ${section.title}</span>
+                    </div>
+                    <div class="questions-wrapper">
+            `;
+            
+            section.questions.forEach(q => {
+                html += `
+                    <div class="question-card">
+                        <div class="question-header">
+                            <span class="question-number">Q${q.num}</span>
+                            <p class="question-text">${q.text}</p>
+                        </div>
+                        <textarea 
+                            id="answer-${q.num}" 
+                            placeholder="こちらにご記入ください..."
+                            oninput="saveAnswer(${q.num}, this.value)"
+                        >${answers[q.num] || ''}</textarea>
+                    </div>
+                `;
+            });
+
+            html += `
+                    </div>
+                </div>
+                <div class="nav-buttons">
+                    <button class="btn btn-prev" onclick="prevCategory()" ${currentCategoryIndex === 0 ? 'disabled' : ''}>
+                        ← 戻る
+                    </button>
+                    <button class="btn ${currentCategoryIndex === questions.length - 1 ? 'btn-complete' : 'btn-next'}" onclick="nextCategory()">
+                        ${currentCategoryIndex === questions.length - 1 ? '完了 ✓' : '次へ →'}
+                    </button>
+                </div>
+            `;
+
+            container.innerHTML = html;
+            window.scrollTo(0, 0);
+        }
+
+        function prevCategory() {
+            if (currentCategoryIndex > 0) {
+                currentCategoryIndex--;
+                renderQuestions();
+                renderCategoryNav();
+                renderCategoryIndicator();
+            }
+        }
+
+        function nextCategory() {
+            if (currentCategoryIndex < questions.length - 1) {
+                currentCategoryIndex++;
+                renderQuestions();
+                renderCategoryNav();
+                renderCategoryIndicator();
+            } else {
+                showCompleteScreen();
+            }
+        }
+
+        function startQuestionnaire() {
+            document.getElementById('intro-screen').classList.remove('active');
+            document.getElementById('questionnaire-screen').classList.add('active');
+            renderQuestions();
+            updateProgress();
+            renderCategoryNav();
+            renderCategoryIndicator();
+        }
+
+        function showCompleteScreen() {
+            document.getElementById('questionnaire-screen').classList.remove('active');
+            document.getElementById('complete-screen').classList.add('active');
+        }
+
+        function backToQuestions() {
+            document.getElementById('complete-screen').classList.remove('active');
+            document.getElementById('questionnaire-screen').classList.add('active');
+        }
+
+        function printAnswers() {
+            const printWindow = window.open('', '_blank');
+            
+            let html = `
+                <!DOCTYPE html>
+                <html lang="ja">
+                <head>
+                    <meta charset="UTF-8">
+                    <title>親御さん向け質問票 - 回答</title>
+                    <link href="https://fonts.googleapis.com/css2?family=Zen+Maru+Gothic:wght@400;500;700&display=swap" rel="stylesheet">
+                    <style>
+                        * { margin: 0; padding: 0; box-sizing: border-box; }
+                        body { 
+                            font-family: 'Zen Maru Gothic', sans-serif; 
+                            padding: 30px;
+                            font-size: 11pt;
+                            line-height: 1.6;
+                            max-width: 800px;
+                            margin: 0 auto;
+                        }
+                        .print-header {
+                            text-align: center;
+                            margin-bottom: 25px;
+                            padding-bottom: 15px;
+                            border-bottom: 3px solid #333;
+                        }
+                        .print-header h1 { font-size: 20pt; margin-bottom: 5px; }
+                        .print-header p { font-size: 11pt; color: #666; }
+                        .print-date { font-size: 10pt; color: #999; margin-top: 10px; }
+                        .section-header {
+                            background: #C74B4B;
+                            color: white;
+                            padding: 10px 15px;
+                            margin-top: 25px;
+                            margin-bottom: 0;
+                            font-weight: bold;
+                            font-size: 12pt;
+                            border-radius: 8px 8px 0 0;
+                        }
+                        .questions-wrapper {
+                            border: 1px solid #ddd;
+                            border-top: none;
+                            border-radius: 0 0 8px 8px;
+                            margin-bottom: 10px;
+                        }
+                        .question-card {
+                            padding: 15px;
+                            border-bottom: 1px solid #eee;
+                            page-break-inside: avoid;
+                        }
+                        .question-card:last-child {
+                            border-bottom: none;
+                        }
+                        .question-number {
+                            display: inline-block;
+                            background: #F5C518;
+                            padding: 3px 12px;
+                            border-radius: 15px;
+                            font-size: 9pt;
+                            font-weight: bold;
+                            margin-bottom: 8px;
+                        }
+                        .question-text {
+                            font-size: 10pt;
+                            font-weight: 500;
+                            margin-bottom: 10px;
+                        }
+                        .answer-box {
+                            background: #f9f9f9;
+                            border: 1px solid #ddd;
+                            padding: 12px;
+                            min-height: 50px;
+                            font-size: 10pt;
+                            white-space: pre-wrap;
+                            border-radius: 6px;
+                        }
+                        .empty-answer {
+                            color: #999;
+                            font-style: italic;
+                        }
+                        @media print {
+                            body { padding: 15px; }
+                            .section-header { 
+                                -webkit-print-color-adjust: exact; 
+                                print-color-adjust: exact;
+                            }
+                            .question-number {
+                                -webkit-print-color-adjust: exact;
+                                print-color-adjust: exact;
+                            }
+                        }
+                    </style>
+                </head>
+                <body>
+                    <div class="print-header">
+                        <h1>親御さん向け質問票</h1>
+                        <p>Tools. こどもと保護者と教員のための合理的配慮ガイドブック 2025</p>
+                        <p class="print-date">記入日: ${new Date().toLocaleDateString('ja-JP')}</p>
+                    </div>
+            `;
+
+            questions.forEach(section => {
+                html += `
+                    <div class="section-header">${section.category}. ${section.title}</div>
+                    <div class="questions-wrapper">
+                `;
+                section.questions.forEach(q => {
+                    const answer = answers[q.num] || '';
+                    html += `
+                        <div class="question-card">
+                            <span class="question-number">Q${q.num}</span>
+                            <p class="question-text">${q.text}</p>
+                            <div class="answer-box ${!answer ? 'empty-answer' : ''}">
+                                ${answer || '（未記入）'}
+                            </div>
+                        </div>
+                    `;
+                });
+                html += `</div>`;
+            });
+
+            html += `
+                </body>
+                </html>
+            `;
+
+            printWindow.document.write(html);
+            printWindow.document.close();
+            printWindow.onload = function() {
+                printWindow.print();
+            };
+        }
+
+        // Initialize
+        initAnswers();
+        renderCategoryNav();
+        updateProgress();
+    </script>
+</body>
+</html>
